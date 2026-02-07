@@ -21,11 +21,7 @@ const AdminDashboard = () => {
 
   const bloodGroupOptions = ['All', ...BLOOD_GROUPS];
 
-  useEffect(() => {
-    fetchData();
-  }, [activeTab]);
-
-  const fetchData = async () => {
+  const fetchData = React.useCallback(async () => {
     setLoading(true);
     setMessage({ type: '', text: '' });
 
@@ -40,7 +36,11 @@ const AdminDashboard = () => {
       setLoading(false);
       setCurrentPage(1);
     }
-  };
+  }, [activeTab]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleUpdateStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === 'AVAILABLE' ? 'NOT_AVAILABLE' : 'AVAILABLE';
@@ -190,7 +190,7 @@ const AdminDashboard = () => {
                     <select
                       value={bloodFilter}
                       onChange={(e) => { setBloodFilter(e.target.value); setCurrentPage(1); }}
-                      className="w-full px-6 py-4 rounded-2xl bg-white border-none shadow-premium text-sm font-black text-primary uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all outline-none appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_1.5rem_center] bg-no-repeat"
+                      className="w-full px-6 py-4 rounded-2xl bg-white border-none shadow-premium text-sm font-black text-primary uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all outline-none appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_1.5rem_center] bg-no-repeat"
                     >
                       {bloodGroupOptions.map(bg => <option key={bg} value={bg}>{bg === 'All' ? 'All Blood Groups' : bg}</option>)}
                     </select>

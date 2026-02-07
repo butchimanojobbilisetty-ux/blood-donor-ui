@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { BLOOD_GROUPS } from '../utils/constants';
 
 const SearchDonors = () => {
-  const navigate = useNavigate();
   const [searchCriteria, setSearchCriteria] = useState({
     bloodGroup: '',
     city: '',
@@ -19,11 +18,7 @@ const SearchDonors = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  React.useEffect(() => {
-    handleSearch(new Event('submit'));
-  }, []);
-
-  const handleSearch = async (e) => {
+  const handleSearch = React.useCallback(async (e) => {
     if (e && e.preventDefault) e.preventDefault();
     setLoading(true);
     setMessage('');
@@ -54,7 +49,11 @@ const SearchDonors = () => {
       setLoading(false);
       setCurrentPage(1);
     }
-  };
+  }, [searchCriteria]);
+
+  React.useEffect(() => {
+    handleSearch();
+  }, [handleSearch]);
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -93,7 +92,7 @@ const SearchDonors = () => {
                   name="bloodGroup"
                   value={searchCriteria.bloodGroup}
                   onChange={handleChange}
-                  className="input-field appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat py-3"
+                  className="input-field appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat py-3"
                 >
                   <option value="">All Groups</option>
                   {BLOOD_GROUPS.map(group => (
@@ -120,7 +119,7 @@ const SearchDonors = () => {
                   name="availabilityStatus"
                   value={searchCriteria.availabilityStatus}
                   onChange={handleChange}
-                  className="input-field appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat py-3"
+                  className="input-field appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat py-3"
                 >
                   <option value="">All Statuses</option>
                   <option value="AVAILABLE">Available Now</option>
