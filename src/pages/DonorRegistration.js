@@ -107,41 +107,41 @@ const DonorRegistration = () => {
   }
 
   return (
-    <div className="min-h-screen bg-surface-variant py-20">
+    <div className="min-h-screen bg-surface-variant py-8 md:py-20">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
-          <div className="glass-card bg-white border-none shadow-premium p-8 lg:p-12">
-            <div className="text-center mb-12">
-              <h1 className="text-4xl font-extrabold text-secondary mb-3">Join the <span className="text-primary">Cause</span></h1>
+          <div className="glass-card bg-white border-none shadow-premium p-4 sm:p-6 lg:p-12">
+            <div className="text-center mb-6 md:mb-12">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-secondary mb-2 md:mb-3">Join the <span className="text-primary">Cause</span></h1>
               <p className="text-gray-500 font-medium">
                 {step === 1 ? 'Save lives by sharing your gift of life.' : 'Verify your identity to complete registration.'}
               </p>
             </div>
 
             {/* Stepper */}
-            <div className="flex items-center justify-center mb-16 px-4">
+            <div className="flex items-center justify-center mb-8 md:mb-16 px-2 md:px-4">
               <div className="flex flex-col items-center">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-lg ${step >= 1 ? 'bg-gradient-premium text-white rotate-12 scale-110' : 'bg-gray-100 text-gray-400'}`}>
+                <div className={`w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-lg text-sm md:text-base ${step >= 1 ? 'bg-gradient-premium text-white rotate-12 scale-110' : 'bg-gray-100 text-gray-400'}`}>
                   {step > 1 ? '✓' : '1'}
                 </div>
-                <span className={`mt-3 text-xs font-black uppercase tracking-widest ${step >= 1 ? 'text-primary' : 'text-gray-400'}`}>Profile</span>
+                <span className={`mt-2 md:mt-3 text-[10px] md:text-xs font-black uppercase tracking-wider md:tracking-widest ${step >= 1 ? 'text-primary' : 'text-gray-400'}`}>Profile</span>
               </div>
-              <div className={`flex-1 h-1 mx-4 rounded-full transition-all duration-700 ${step >= 2 ? 'bg-primary' : 'bg-gray-100'}`}></div>
+              <div className={`flex-1 h-1 mx-2 md:mx-4 rounded-full transition-all duration-700 ${step >= 2 ? 'bg-primary' : 'bg-gray-100'}`}></div>
               <div className="flex flex-col items-center">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-lg ${step >= 2 ? 'bg-gradient-premium text-white rotate-12 scale-110' : 'bg-gray-100 text-gray-400'}`}>
+                <div className={`w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-lg text-sm md:text-base ${step >= 2 ? 'bg-gradient-premium text-white rotate-12 scale-110' : 'bg-gray-100 text-gray-400'}`}>
                   2
                 </div>
-                <span className={`mt-3 text-xs font-black uppercase tracking-widest ${step >= 2 ? 'text-primary' : 'text-gray-400'}`}>Verify</span>
+                <span className={`mt-2 md:mt-3 text-[10px] md:text-xs font-black uppercase tracking-wider md:tracking-widest ${step >= 2 ? 'text-primary' : 'text-gray-400'}`}>Verify</span>
               </div>
             </div>
 
             {/* Notifications */}
             {message.text && (
-              <div className={`mb-10 p-6 rounded-2xl flex items-center justify-between gap-4 fade-in ${message.type === 'success' ? 'bg-emerald-50 text-emerald-800' : 'bg-rose-50 text-rose-800'
+              <div className={`mb-6 md:mb-10 p-4 md:p-6 rounded-2xl flex items-center justify-between gap-3 md:gap-4 fade-in ${message.type === 'success' ? 'bg-emerald-50 text-emerald-800' : 'bg-rose-50 text-rose-800'
                 }`}>
-                <div className="flex items-center gap-4">
-                  <span className="text-2xl">{message.type === 'success' ? '✨' : '⚠️'}</span>
-                  <p className="font-semibold">{message.text}</p>
+                <div className="flex items-center gap-3 md:gap-4">
+                  <span className="text-xl md:text-2xl">{message.type === 'success' ? '✨' : '⚠️'}</span>
+                  <p className="font-semibold text-sm md:text-base">{message.text}</p>
                 </div>
               </div>
             )}
@@ -184,7 +184,7 @@ const DonorRegistration = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`md:col-span-2 btn btn-primary py-4 text-lg mt-4 flex items-center justify-center gap-3 transition-all ${loading ? 'opacity-80 cursor-not-allowed' : ''}`}
+                  className={`md:col-span-2 btn btn-primary py-3 md:py-4 text-base md:text-lg mt-4 flex items-center justify-center gap-3 transition-all ${loading ? 'opacity-80 cursor-not-allowed' : ''}`}
                 >
                   {loading ? 'Processing...' : 'Send Verification Code'}
                 </button>
@@ -192,7 +192,7 @@ const DonorRegistration = () => {
             )}
 
             {step === 2 && !loading && (
-              <form onSubmit={handleVerifyOtp} className="space-y-10 py-4">
+              <form onSubmit={handleVerifyOtp} className="space-y-6 md:space-y-10 py-4">
                 <div className="text-center space-y-4">
                   <label className="text-sm font-black text-secondary tracking-widest uppercase">Verification Code</label>
                   <input
@@ -202,7 +202,7 @@ const DonorRegistration = () => {
                     required
                     pattern="[0-9]{6}"
                     maxLength="6"
-                    className="w-full bg-gray-50 border-2 border-dashed border-gray-200 rounded-3xl py-8 text-center text-5xl font-black text-primary tracking-[1.5rem] focus:outline-none focus:border-primary focus:bg-white transition-all shadow-inner"
+                    className="w-full max-w-md mx-auto bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl py-3 md:py-4 text-center text-2xl md:text-3xl font-black text-primary tracking-[0.3rem] md:tracking-[0.5rem] focus:outline-none focus:border-primary focus:bg-white transition-all shadow-inner"
                     placeholder="000000"
                   />
                   <p className="text-sm text-gray-500">
@@ -210,19 +210,19 @@ const DonorRegistration = () => {
                   </p>
                 </div>
 
-                <div className="flex gap-6">
+                <div className="flex gap-3 md:gap-6">
                   <button
                     type="button"
                     onClick={() => setStep(1)}
                     disabled={loading}
-                    className="flex-1 btn btn-secondary py-4 uppercase disabled:opacity-50"
+                    className="flex-1 btn btn-secondary py-3 md:py-4 text-sm md:text-base uppercase disabled:opacity-50"
                   >
                     Back
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex-[2] btn btn-primary py-4 uppercase shadow-xl flex items-center justify-center gap-3"
+                    className="flex-[2] btn btn-primary py-3 md:py-4 text-sm md:text-base uppercase shadow-xl flex items-center justify-center gap-3"
                   >
                     Finalize Registration
                   </button>
