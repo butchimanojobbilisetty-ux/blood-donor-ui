@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { donorService } from '../services/api';
 import Loading from '../components/Loading';
-import { useNavigate } from 'react-router-dom';
 import { BLOOD_GROUPS } from '../utils/constants';
 
 const SearchDonors = () => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import { donorService } from '../services/api';
 import Loading from '../components/Loading';
 import { BLOOD_GROUPS } from '../utils/constants';
