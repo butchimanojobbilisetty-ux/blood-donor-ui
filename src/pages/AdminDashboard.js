@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService, authService } from '../services/api';
 import PulseLoading from '../components/PulseLoading';
@@ -18,6 +18,14 @@ const AdminDashboard = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+  const listRef = useRef(null);
+
+  // Scroll to list top
+  useEffect(() => {
+    if (activeTab === 'donors' && listRef.current) {
+      listRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [currentPage, activeTab]);
 
   const bloodGroupOptions = ['All', ...BLOOD_GROUPS];
 
@@ -173,7 +181,7 @@ const AdminDashboard = () => {
         {loading ? <PulseLoading /> : (
           <div className="fade-in">
             {activeTab === 'donors' && (
-              <div className="space-y-10">
+              <div ref={listRef} className="space-y-10">
                 {/* Search and Filters */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="md:col-span-2 relative">

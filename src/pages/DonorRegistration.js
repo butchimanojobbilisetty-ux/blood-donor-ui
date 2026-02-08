@@ -11,6 +11,13 @@ const DonorRegistration = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
+  // Scroll to top when step changes or message appears (mobile fix)
+  useEffect(() => {
+    if (step || message.text) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [step, message]);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',

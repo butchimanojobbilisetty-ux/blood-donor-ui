@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { donorService } from '../services/api';
 import BloodLoading from '../components/BloodLoading';
 import SearchableSelect from '../components/SearchableSelect';
@@ -22,6 +22,14 @@ const SearchDonors = () => {
   const [message, setMessage] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const resultsRef = useRef(null);
+
+  // Auto-scroll to results
+  React.useEffect(() => {
+    if (!loading && searched && donors.length > 0 && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [loading, searched, donors.length, currentPage]);
 
   const handleSearch = React.useCallback(async (e) => {
     if (e && e.preventDefault) e.preventDefault();
@@ -217,7 +225,7 @@ const SearchDonors = () => {
 
         {/* Results */}
         {!loading && searched && donors.length > 0 && (
-          <div className="max-w-7xl mx-auto px-4 lg:px-0">
+          <div ref={resultsRef} className="max-w-7xl mx-auto px-4 lg:px-0">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 pb-4 border-b border-gray-100">
               <div className="flex items-center gap-4">
                 <div className="hidden md:block w-2 h-10 bg-primary rounded-full shadow-[0_0_15px_rgba(239,68,68,0.3)]"></div>
