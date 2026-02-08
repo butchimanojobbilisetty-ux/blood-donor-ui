@@ -1,0 +1,60 @@
+/* Blood Drops Animation */
+.blood-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(2px);
+}
+
+.blood-drop {
+    position: absolute;
+    top: -20px;
+    width: 15px;
+    height: 20px;
+    background: #DC2626;
+    /* Primary red color */
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    opacity: 0.8;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-20px) scale(0.8);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.9;
+    }
+
+    90% {
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translateY(100vh) scale(1);
+        opacity: 0;
+    }
+}
+
+/* Add some variation to drops */
+.blood-drop:nth-child(2n) {
+    background: #B91C1C;
+    /* Darker red */
+    width: 12px;
+    height: 18px;
+}
+
+.blood-drop:nth-child(3n) {
+    background: #EF4444;
+    /* Lighter red */
+    width: 18px;
+    height: 24px;
+}

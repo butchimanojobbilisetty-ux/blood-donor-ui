@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 import { donorService } from '../services/api';
-import Loading from '../components/Loading';
-import { BLOOD_GROUPS } from '../utils/constants';
+import HeartLoading from '../components/HeartLoading';
+import SearchableSelect from '../components/SearchableSelect';
+import { BLOOD_GROUPS, STATES, getCitiesForState, getAreasForCity } from '../utils/constants';
 
 const DonorRegistration = () => {
   const [step, setStep] = useState(1); // 1: Form, 2: OTP
@@ -15,17 +16,34 @@ const DonorRegistration = () => {
     email: '',
     phone: '',
     bloodGroup: '',
-    area: '',
-    city: ''
+    state: '',
+    city: '',
+    area: ''
   });
+
+  const [availableCities, setAvailableCities] = useState([]);
+  const [availableAreas, setAvailableAreas] = useState([]);
 
   const [otp, setOtp] = useState('');
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+
+    if (name === 'state') {
+      const cities = getCitiesForState(value);
+      setAvailableCities(cities);
+      setAvailableAreas([]); // Reset areas when state changes
+      setFormData({ ...formData, state: value, city: '', area: '' });
+    }
+    // Handle city change - update available areas
+    else if (name === 'city') {
+      const areas = getAreasForCity(value);
+      setAvailableAreas(areas);
+      setFormData({ ...formData, city: value, area: '' });
+    }
+    else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -108,6 +126,7 @@ const DonorRegistration = () => {
 
   return (
     <div className="min-h-screen bg-surface-variant py-8 md:py-20">
+      {loading && <HeartLoading />}
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           <div className="glass-card bg-white border-none shadow-premium p-4 sm:p-6 lg:p-12">
@@ -165,21 +184,51 @@ const DonorRegistration = () => {
 
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-secondary tracking-wide uppercase px-1">Blood Group</label>
-                  <select name="bloodGroup" value={formData.bloodGroup} onChange={handleChange} required className="input-field appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_1rem_center] bg-no-repeat">
-                    <option value="">Select Group</option>
-                    {BLOOD_GROUPS.map(group => <option key={group} value={group}>{group}</option>)}
-                  </select>
+                  <div className="relative">
+                    <select
+                      name="bloodGroup"
+                      value={formData.bloodGroup}
+                      onChange={handleChange}
+                      required
+                      className="input-field appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_1rem_center] bg-no-repeat w-full"
+                    >
+                      <option value="">Select Group</option>
+                      {BLOOD_GROUPS.map(group => <option key={group} value={group}>{group}</option>)}
+                    </select>
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-secondary tracking-wide uppercase px-1">City</label>
-                  <input type="text" name="city" value={formData.city} onChange={handleChange} required className="input-field" placeholder="Hyderabad" />
-                </div>
+                <SearchableSelect
+                  label="State"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  options={STATES}
+                  placeholder="Select or type state"
+                  required
+                />
 
-                <div className="md:col-span-2 space-y-2">
-                  <label className="text-sm font-bold text-secondary tracking-wide uppercase px-1">Specific Area</label>
-                  <input type="text" name="area" value={formData.area} onChange={handleChange} required className="input-field" placeholder="e.g. Banjara Hills, Street No 4" />
-                </div>
+                <SearchableSelect
+                  label="City"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  options={availableCities}
+                  placeholder={!formData.state ? "Select state first" : "Select or type city"}
+                  disabled={!formData.state}
+                  required
+                />
+
+                <SearchableSelect
+                  label="Specific Area / Locality"
+                  name="area"
+                  value={formData.area}
+                  onChange={handleChange}
+                  options={availableAreas}
+                  placeholder={!formData.city ? "Select city first" : "Select or type area"}
+                  disabled={!formData.city}
+                  required
+                />
 
                 <button
                   type="submit"
@@ -232,7 +281,7 @@ const DonorRegistration = () => {
 
             {loading && (
               <div className="py-20 text-center">
-                <Loading />
+                <HeartLoading />
                 <p className="mt-8 text-gray-400 font-bold uppercase tracking-widest animate-pulse">Communicating with Secure Server...</p>
               </div>
             )}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService, authService } from '../services/api';
-import Loading from '../components/Loading';
+import PulseLoading from '../components/PulseLoading';
 import { BLOOD_GROUPS } from '../utils/constants';
 
 const AdminDashboard = () => {
@@ -170,7 +170,7 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {loading ? <Loading /> : (
+        {loading ? <PulseLoading /> : (
           <div className="fade-in">
             {activeTab === 'donors' && (
               <div className="space-y-10">

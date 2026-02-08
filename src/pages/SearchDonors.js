@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import { donorService } from '../services/api';
-import Loading from '../components/Loading';
-import { BLOOD_GROUPS } from '../utils/constants';
+import BloodLoading from '../components/BloodLoading';
+import SearchableSelect from '../components/SearchableSelect';
+import { BLOOD_GROUPS, STATES, getCitiesForState, getAreasForCity } from '../utils/constants';
 
 const SearchDonors = () => {
   const [searchCriteria, setSearchCriteria] = useState({
     bloodGroup: '',
+    state: '',
     city: '',
+    area: '',
     availabilityStatus: ''
   });
+
+  const [availableCities, setAvailableCities] = useState([]);
+  const [availableAreas, setAvailableAreas] = useState([]);
 
   const [donors, setDonors] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -26,7 +32,9 @@ const SearchDonors = () => {
     try {
       const criteria = {};
       if (searchCriteria.bloodGroup) criteria.bloodGroup = searchCriteria.bloodGroup;
+      if (searchCriteria.state) criteria.state = searchCriteria.state;
       if (searchCriteria.city) criteria.city = searchCriteria.city;
+      if (searchCriteria.area) criteria.area = searchCriteria.area;
       if (searchCriteria.availabilityStatus) criteria.availabilityStatus = searchCriteria.availabilityStatus;
 
       const response = await donorService.searchDonors(criteria);
@@ -63,10 +71,34 @@ const SearchDonors = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleChange = (e) => {
-    setSearchCriteria({
-      ...searchCriteria,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+
+    if (name === 'state') {
+      const cities = getCitiesForState(value);
+      setAvailableCities(cities);
+      setAvailableAreas([]);
+      setSearchCriteria({
+        ...searchCriteria,
+        state: value,
+        city: '',
+        area: ''
+      });
+    }
+    else if (name === 'city') {
+      const areas = getAreasForCity(value);
+      setAvailableAreas(areas);
+      setSearchCriteria({
+        ...searchCriteria,
+        city: value,
+        area: ''
+      });
+    }
+    else {
+      setSearchCriteria({
+        ...searchCriteria,
+        [name]: value
+      });
+    }
   };
 
   return (
@@ -84,7 +116,7 @@ const SearchDonors = () => {
         {/* Search Form */}
         <div className="max-w-5xl mx-auto glass-card border-none bg-white p-6 lg:p-10 mb-10 shadow-xl">
           <form onSubmit={handleSearch} className="space-y-6">
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-4 gap-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-black text-secondary tracking-widest uppercase px-1">Blood Group</label>
                 <select
@@ -101,14 +133,37 @@ const SearchDonors = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-black text-secondary tracking-widest uppercase px-1">City</label>
-                <input
-                  type="text"
+                <SearchableSelect
+                  label="State"
+                  name="state"
+                  value={searchCriteria.state}
+                  onChange={handleChange}
+                  options={STATES}
+                  placeholder="Type to filter..."
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <SearchableSelect
+                  label="City"
                   name="city"
                   value={searchCriteria.city}
                   onChange={handleChange}
-                  className="input-field py-3"
-                  placeholder="e.g. Hyderabad"
+                  options={availableCities}
+                  placeholder={!searchCriteria.state ? "Select state first" : "Type to filter..."}
+                  disabled={!searchCriteria.state}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <SearchableSelect
+                  label="Area"
+                  name="area"
+                  value={searchCriteria.area}
+                  onChange={handleChange}
+                  options={availableAreas}
+                  placeholder={!searchCriteria.city ? "Select city first" : "Type to filter..."}
+                  disabled={!searchCriteria.city}
                 />
               </div>
 
@@ -136,8 +191,8 @@ const SearchDonors = () => {
           </form>
         </div>
 
-        {/* Loading */}
-        {loading && <Loading />}
+        {/* Loading with Blood Drops Animation */}
+        {loading && <BloodLoading />}
 
         {/* Message */}
         {message && !loading && (
