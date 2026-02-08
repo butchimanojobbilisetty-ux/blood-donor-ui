@@ -66,9 +66,7 @@ const SearchDonors = () => {
     }
   }, [searchCriteria]);
 
-  React.useEffect(() => {
-    handleSearch();
-  }, [handleSearch]);
+  // Manual search only - no auto-trigger on filter change
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
