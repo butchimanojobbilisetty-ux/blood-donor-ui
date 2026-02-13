@@ -107,29 +107,45 @@ const SearchDonors = () => {
     }
   };
 
+  const handleClear = () => {
+    setSearchCriteria({
+      bloodGroup: '',
+      state: '',
+      city: '',
+      area: '',
+      availabilityStatus: ''
+    });
+    setAvailableCities([]);
+    setAvailableAreas([]);
+    setDonors([]);
+    setSearched(false);
+    setMessage('');
+    setCurrentPage(1);
+  };
+
   return (
-    <div className="min-h-screen bg-surface-variant py-12">
+    <div className="min-h-screen bg-surface-variant py-6">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto text-center mb-10">
-          <h1 className="text-4xl lg:text-5xl font-extrabold text-secondary mb-3">
+        <div className="max-w-4xl mx-auto text-center mb-5">
+          <h1 className="text-2xl lg:text-3xl font-extrabold text-secondary mb-1">
             Find <span className="text-primary">Donors</span>
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-sm text-gray-600">
             Search for blood donors near you and save lives instantly.
           </p>
         </div>
 
         {/* Search Form */}
-        <div className="max-w-5xl mx-auto glass-card border-none bg-white p-6 lg:p-10 mb-10 shadow-xl">
-          <form onSubmit={handleSearch} className="space-y-6">
-            <div className="grid md:grid-cols-4 gap-4">
+        <div className="max-w-6xl mx-auto glass-card border-none bg-white p-4 lg:p-5 mb-6 shadow-lg">
+          <form onSubmit={handleSearch} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
               <div className="space-y-1.5">
                 <label className="text-xs font-black text-secondary tracking-widest uppercase px-1">Blood Group</label>
                 <select
                   name="bloodGroup"
                   value={searchCriteria.bloodGroup}
                   onChange={handleChange}
-                  className="input-field appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat py-3"
+                  className="input-field appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:14px] bg-[right_0.75rem_center] bg-no-repeat py-2 text-sm"
                 >
                   <option value="">All Groups</option>
                   {BLOOD_GROUPS.map(group => (
@@ -179,7 +195,7 @@ const SearchDonors = () => {
                   name="availabilityStatus"
                   value={searchCriteria.availabilityStatus}
                   onChange={handleChange}
-                  className="input-field appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat py-3"
+                  className="input-field appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:14px] bg-[right_0.75rem_center] bg-no-repeat py-2 text-sm"
                 >
                   <option value="">All Statuses</option>
                   <option value="AVAILABLE">Available Now</option>
@@ -188,12 +204,21 @@ const SearchDonors = () => {
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="btn btn-primary w-full py-3.5 text-sm uppercase tracking-widest font-black shadow-lg"
-            >
-              Search Donors
-            </button>
+            <div className="flex flex-col sm:flex-row justify-end gap-2 pt-1">
+              <button
+                type="button"
+                onClick={handleClear}
+                className="btn bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-100 px-5 py-1.5 text-[10px] uppercase tracking-widest font-black shadow-sm transition-all"
+              >
+                Clear
+              </button>
+              <button
+                type="submit"
+                className="btn btn-primary px-8 py-1.5 text-[10px] uppercase tracking-widest font-black shadow-lg"
+              >
+                Search Donors
+              </button>
+            </div>
           </form>
         </div>
 
@@ -311,31 +336,43 @@ const SearchDonors = () => {
               </table>
             </div>
 
-            {/* Mobile View - Cards */}
-            <div className="md:hidden flex flex-col gap-4">
+            {/* Mobile View - Compact Cards */}
+            <div className="md:hidden flex flex-col gap-3">
               {currentDonors.map((donor) => (
-                <div key={donor.id} className="glass-card bg-white p-6 shadow-premium border-none">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="w-12 h-12 bg-gradient-premium rounded-xl flex items-center justify-center text-white font-black text-lg">
+                <div key={donor.id} className="glass-card bg-white p-4 shadow-sm border border-gray-100 rounded-xl">
+                  <div className="flex items-center gap-4">
+                    {/* Left: Blood Group Avatar */}
+                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-premium rounded-full flex items-center justify-center text-white font-black text-lg shadow-sm">
                       {donor.bloodGroup}
                     </div>
-                    <span className={`px-4 py-1.5 rounded-lg text-sm font-bold ${donor.availabilityStatus === 'AVAILABLE'
-                      ? 'bg-emerald-50 text-emerald-600'
-                      : 'bg-rose-50 text-rose-600'
-                      }`}>
-                      {donor.availabilityStatus === 'AVAILABLE' ? 'Available' : 'Resting'}
-                    </span>
+
+                    {/* Center: Info */}
+                    <div className="flex-grow min-w-0">
+                      <div className="flex justify-between items-start">
+                        <h3 className="text-base font-bold text-secondary truncate pr-2">{donor.name}</h3>
+                        <span className={`flex-shrink-0 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${donor.availabilityStatus === 'AVAILABLE'
+                          ? 'bg-emerald-50 text-emerald-600'
+                          : 'bg-rose-50 text-rose-600'
+                          }`}>
+                          {donor.availabilityStatus === 'AVAILABLE' ? 'Available' : 'Resting'}
+                        </span>
+                      </div>
+
+                      <div className="text-xs text-gray-500 font-medium flex items-center gap-1 mt-0.5 truncate">
+                        <span>📍</span> {donor.area}, {donor.city}
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-secondary mb-1">{donor.name}</h3>
-                  <p className="text-gray-600 text-base mb-5 font-medium flex items-center gap-2">
-                    <span>📍</span> {donor.area}, {donor.city}
-                  </p>
-                  <a
-                    href={`tel:${donor.phone}`}
-                    className="flex items-center justify-center gap-3 w-full py-4 bg-gray-50 rounded-xl text-lg font-black text-secondary"
-                  >
-                    <span>📱</span> {donor.phone}
-                  </a>
+
+                  {/* Actions */}
+                  <div className="mt-3 flex gap-2">
+                    <a
+                      href={`tel:${donor.phone}`}
+                      className="flex-1 flex items-center justify-center gap-2 py-2 bg-primary/5 rounded-lg text-primary font-bold text-sm hover:bg-primary/10 transition-colors"
+                    >
+                      <span>📞</span> Call Now
+                    </a>
+                  </div>
                 </div>
               ))}
             </div>
@@ -354,20 +391,9 @@ const SearchDonors = () => {
                   Previous
                 </button>
 
-                <div className="flex gap-2">
-                  {[...Array(totalPages)].map((_, i) => (
-                    <button
-                      key={i + 1}
-                      onClick={() => paginate(i + 1)}
-                      className={`w-10 h-10 rounded-xl text-xs font-black transition-all ${currentPage === i + 1
-                        ? 'bg-gradient-premium text-white shadow-lg'
-                        : 'bg-white text-gray-500 hover:bg-gray-50'
-                        }`}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-                </div>
+                <span className="text-sm font-bold text-gray-600 px-2">
+                  Page {currentPage} of {totalPages}
+                </span>
 
                 <button
                   onClick={() => paginate(currentPage + 1)}

@@ -54,9 +54,9 @@ const SearchableSelect = ({
     };
 
     return (
-        <div className="relative space-y-2" ref={wrapperRef}>
+        <div className="relative space-y-1" ref={wrapperRef}>
             {label && (
-                <label className="text-sm font-bold text-secondary tracking-wide uppercase px-1">
+                <label className="text-xs font-black text-secondary tracking-widest uppercase px-1">
                     {label}
                 </label>
             )}
@@ -71,7 +71,7 @@ const SearchableSelect = ({
                     disabled={disabled}
                     required={required}
                     autoComplete="off"
-                    className={`input-field w-full text-sm ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`input-field w-full text-sm py-2 ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 />
 
                 {/* Dropdown Arrow Icon */}
